@@ -1,2 +1,3 @@
 test/*
 !/test/index.php
+test2/*
