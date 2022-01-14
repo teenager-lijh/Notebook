@@ -181,4 +181,28 @@
 	# 相当于拉取 index.php 文件，并覆盖工作区文件
 	git checkout index.php 
 
-	
+
+17 删除分支
+	1）删除远程分支
+	git branch -a # 查看所有分支，红色代表远程分支，
+		      # 绿色代表当前所处分支
+	git push origin --delete branch_name # 删除远程分支 branch_name	
+	2) 推送本地分支到远程仓库
+	git push --set-upstream origin branch_name
+	3) 删除远程已经不存在但是本地还存在的分支
+	   仅使用 git pull 并不能行
+	   git remote prune origin # 获取远程各分支与本地分支的信息进行对比
+	   git branch -vv # 查看信息对比结果，在方括号中有 :gone 的即为本地无用分支
+	   git branch -d branch_name # 删除本地分支
+
+
+
+
+
+
+
+
+
+
+
+ 
