@@ -71,7 +71,7 @@
 	6) 推送代码到远端仓库
 	git push
 
-08 查看代码修改
+08 查看代码修改(比较差异)
 	1） 查看工作区代码修改
 	git diff file_name
 	2) 查看暂存区代码修改 （与版本库最后一次记录比较）	
@@ -89,3 +89,96 @@
 	3 比较修改的命令为git diff，不同情况增加不同参数
 	4 查看暂存区的额外参数为--cached
 
+09 忽略文件权限信息
+	git config core.filemode false #当前版本库
+ 	git config --global core.fileMode false # 全局忽略
+	cat .git/config # 配置后查看配置文件的变化 
+	
+10 忽略上传某些文件
+	1)
+	添加 .gitignore 文件 文件中写入需要忽略的文件名或目录名
+	检查某个文件是否被成功忽略
+	2) 
+	忽略目录下的所有文件 dir_name/*
+	3)
+	git check-ignore -v 文件名 # git 会返回第几行忽略了该文件
+	4)
+	不修改 .gitignore 情况下强制添加文件
+	git add -f file_name # f = force
+	5)
+	反向排除，即此文件不被忽略
+	!/test/index.php # 排除 test 目录下的 index.php 文件
+	6) 
+	git rm --cached file_name # 删除某文件的缓存	
+	7)
+	git rm -r --cached dir_name/ # 删除某目录的缓存
+	8) 
+	git add -f [file_name or dir_name] 
+	# 之所要强制添加是为了删除文件缓存后，再生成一份新的缓存
+	# 但是这个方法在我的版本的 git 上并不能行
+	9) 
+	git update-index --assume-unchanged file_name 强制忽略文件  
+	git update-index --no-assume-unchanged file_name  取消强制忽略文件 
+
+
+11 查看分支
+	1） 查看本地分支
+	git branch # 绿色代表当前所处分支
+	2)  查看远程和本地的所有分支
+	git branch -a # a = all
+
+12 新建分支
+	1) 切换分支 = 本地没有但远程有则复制过来
+	git checkout branch_name # 需要保证本地或者远程存在此分支
+	2) 新建本地分支
+	git checkout -b test # 此时远程不存在此分支名不能直接推送
+	git push --set-upstream origin test # 首次推送新分支的时候
+
+13 合并分支
+	git merge test # 将 test 分支合并到主分支
+	
+14 删除分支
+	git branch -d branch_name # 普通删除分支 d = delete
+	git branch -D branch_name # 强制删除分支 D = Delete
+
+15 比较不同分支之间的差异
+	1)查看哪些文件被修改了(比较分支1 和 分支2)
+	git diff branch_name_1 branch_name_2  --stat
+	2)显示某个文件的具体差异或者具体修改
+	git diff branch_name_1 branch_name_2 file_name
+	@@@ -n +m @@@ # 代表删除了 n 行 添加了 m 行
+	- 内容1 # 代表删除了内容 1
+	+ 内容2 # 代表增加了内容 2
+	3) 显示全部被修改文件的具体差异或者具体修改
+	git diff branch_name_1 branch_name_2
+
+	4) 查看在 1 分支中有但是 2 分支中没有的记录
+	显示出几条记录就说明基于 2 分支创建的 1 分支
+	从他俩有差异开始提交了几次记录，因为提交记录
+	是提交到自己的分支上的，所以就会产生提交到自
+	己的分支上多次，这样造成两者多次记录的差异了
+	git log branch_name_1 ^branch_name_2
+	5)单纯比较分支之间的差异，不论谁提交的次数多
+	也就是，新的记录如果被删除过的话，那么旧的分
+	支看上去内容更多
+	git log branch1...branch2	
+	6) 查看个记录位于哪个分支上
+	git log --left-right branch_1...branch_2
+	# left 即 < 箭头相当于 branch_1
+	# right 即 > 箭头相当于 branch_2
+	# 用箭头标识出当前记录是哪个分支提交的
+	
+16 代码回滚 
+	回滚并不会改变当前工作区的代码，而仅仅是改变了
+	当前版本库中的最新记录
+	git log # 查看版本的提交记录
+	1) 撤销最近一次的提交, 回滚后代码的修改提示
+	将处于工作区
+	git reset HEAD^
+	2) 回滚到指定位置
+	git reset [commit_id] # 回滚
+	3) 将工作区的代码刷新称为版本库中的代码
+	# 相当于拉取 index.php 文件，并覆盖工作区文件
+	git checkout index.php 
+
+	
