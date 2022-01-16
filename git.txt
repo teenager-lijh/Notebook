@@ -28,7 +28,7 @@
 	git clone https://gitee.com/songboy/test201907.git project_name
 
 	2) ssh 方式(地址格式有变化,不需要输入密码)
-	git clone git@gitee.com:songboy/test201907.git  sshtest	
+	git clone git@gitee.com:songboy/test201907.git dir_name 
 	当前用户的主目录存在一个.ssh的文件夹，并且里面已经存在私钥文件，
 	如果没有的话我们可以通过 ssh-keygen(generate)，生成一份公钥与私钥，
 
@@ -195,14 +195,25 @@
 	   git branch -vv # 查看信息对比结果，在方括号中有 :gone 的即为本地无用分支
 	   git branch -d branch_name # 删除本地分支
 
+18 强制推送
+	git reset commit_id # 只能回滚本地仓库的数据
+	git push -f # 想要回滚远程仓库只能先回滚本地仓库然后再推送到远程	
+
+19 远端覆盖本地
+	1）最直接的方法
+	git pull
+	2) 
+	git fetch # 只拉取远程仓库数据, 但不合并
+	git reset --hard origin/master # hard 把当前工作区的差异部分丢弃
+				       # origin/master 为比较的目标分支
+
+20 origin 的含义
+	git remove -v # 可以查看到 origin 是后边的那一串地址的名字
+		      # origin 是 git 为远程仓库起的默认的名字
 
 
-
-
-
-
-
-
-
+21 分支合并
+	git checkout branch_1 # 切换到分支 1
+	git merge branch_2 # 把分支 2 合并到当前所在的分支
 
  
