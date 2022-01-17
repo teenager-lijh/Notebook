@@ -1,3 +1,8 @@
+# 对于 Bochs 虚拟机
+# 在打开虚拟机选择开始模拟后
+# 要输入 c 才能够真正开始模拟 c=continue 
+
+
 1 dd 命令
 
 dd if=./mbr.bin of=./hd60M.img bs=512 count=1 conv=notrunc
@@ -10,6 +15,7 @@ dd if=./boot/mbr.bin of=./hd60M.img bs=512 count=1 conv=notrunc
 
 # 对于 loader 而言是自己指定的地方 
 dd if=./boot/loader.bin of=./hd60M.img bs=512 seek=2 count=1 conv=notrunc
+dd if=./boot/loader.bin of=./hd60M.img bs=512 seek=2 count=4 conv=notrunc
 
 # 各参数的意义
 if=FILE # 从文件读取而不是从标准输入读取
