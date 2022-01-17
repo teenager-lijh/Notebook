@@ -1,0 +1,40 @@
+1 dd 命令
+
+dd if=./mbr.bin of=./hd60M.img bs=512 count=1 conv=notrunc
+# The best way is using notrunc, which will not devide the file to many block.
+
+# 对于 mbr 而言默认就是应该存放在最开始的扇区
+# dd if=~/Build-Your-Own-Operating-System/boot/mbr.bin 
+# of=~/Build-Your-Own-Operating-System/hd60M.img bs=512 count=1 conv=notrunc
+dd if=./boot/mbr.bin of=./hd60M.img bs=512 count=1 conv=notrunc
+
+# 对于 loader 而言是自己指定的地方 
+dd if=./boot/loader.bin of=./hd60M.img bs=512 seek=2 count=1 conv=notrunc
+
+# 各参数的意义
+if=FILE # 从文件读取而不是从标准输入读取
+        # if = input file
+of=FILE # 向文件输出，而不是向标准输出输出
+        # of = output file
+bs=BYTES # bs = block size
+conv=CONVS # conv = convert version
+	   # notrunc
+seek = 2 # 使用 seek 指明向硬盘写入属于的 LBA 逻辑块号
+
+2 nasm 命令
+
+# 对于 mbr
+nasm -I include/ -o mbr.bin mbr.S
+
+# 对于 loader
+nasm -I include/ -o loader.bin loader.S
+
+# loader.S 是必须传入的一个参数，而 -o 后必须紧跟它对应的参数值
+# 所以 loader.S 不论放在哪里都不会引起歧义
+# -f 指明输出文件的格式，默认是 bin 格式喽 ~
+# 还比如有 elf 和 elf64 
+
+
+
+
+
