@@ -41,6 +41,8 @@ nasm -I include/ -o loader.bin loader.S
 # 还比如有 elf 和 elf64 
 
 
+3 终端 Bochs 的运行
+	使用 ctrl + c 来终端 bochs 的运行，再用 c 可以启动 bochs
 
 
 
