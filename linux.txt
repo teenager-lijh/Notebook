@@ -6,6 +6,9 @@ nm file_name 查看文件的重定位情况, 列出未重定位的符号信息
 
 3 ld 链接命令
 ld kernel/main.o -Ttext 0xc0001500 -e main -o kernel/kernel.bin
+# 在64位机器上链接 32 位程序要对 ld 命令添加参数 -m elf_i386
+# eg: ld main.o -o main.bin -m elf_i386
+# eg: ld ./main.o -Ttext 0xc0001500 -e main -o ./kernel.bin -m elf_i386
 # -Ttext 指定运行的起始地址
 # -e = -entry 给起始运行地址起个名字
 # 链接器规定，默认只把名为_start的函数作为程序的入口地址，

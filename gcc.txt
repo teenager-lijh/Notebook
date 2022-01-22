@@ -1,5 +1,6 @@
 1
 gcc -c -o kernel/main.o   kernel/main.c
+# gcc -m32 --------------  参数 -m32 表示要按照 32 位模式编译
 # -c的作用是编译、汇编到目标代码，不进行链接，也就是直接生成目标文件。
 # -o的作用是将输出的文件以指定文件名来存储，有同名文件存在时直接覆盖。
 # 重定位指的是文件里面所用的符号还没有安排地址，这些符号的地址需要将
@@ -8,10 +9,22 @@ gcc -c -o kernel/main.o   kernel/main.c
 # 直接生成的可执行文件的入口还是使用了 _start 作为入口符号，
 # 而 main 函数是被 _start 函数所调用的，在 _start 函数中会做一些环境初始化的工作
 # 这样才可能调用 main 函数
+# 可以使用 gdb 工具来反汇编 kernel.bin 从而查看程序的入口地址是什么
+# 在gcc编译时可以加个参数 -v（verbose） 显示更多的编译细节
+# -S 可以得到 gcc 编译 C 代码后的汇编代码
 
+2 ld 链接命令
+ld kernel/main.o -Ttext 0xc0001500 -e main -o kernel/kernel.bin
+# 在64位机器上链接 32 位程序要对 ld 命令添加参数 -m elf_i386
+# eg: ld main.o -o main.bin -m elf_i386
+# eg: ld ./main.o -Ttext 0xc0001500 -e main -o ./kernel.bin -m elf_i386
+# -Ttext 指定运行的起始地址
+# -e = -entry 给起始运行地址起个名字
+# 链接器规定，默认只把名为_start的函数作为程序的入口地址，
+# 即默认的entry symbol是_start，除非另行指定
 
-
-
+3 readelf 读取 elf 格式的文件信息
+readelf -e file_name 
 
 
 

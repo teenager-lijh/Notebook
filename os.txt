@@ -2,20 +2,29 @@
 # 在打开虚拟机选择开始模拟后
 # 要输入 c 才能够真正开始模拟 c=continue 
 
+hd60M.img 的硬盘布局
+
+1） MBR写在了硬盘的第0扇区，第1扇区是空着的
+2） loader写在硬盘的第2扇区(0开始数的2)，由于loader.bin目前的大小
+    是1342字节，占用3个扇区，所以第2～4扇区不能再用啦
+3） kernel.bin 是选的第9扇区（要是起始为1的话算是第10个扇区）
+
+
 
 1 dd 命令
 
 dd if=./mbr.bin of=./hd60M.img bs=512 count=1 conv=notrunc
 # The best way is using notrunc, which will not devide the file to many block.
 
-# 对于 mbr 而言默认就是应该存放在最开始的扇区
+1) 对于 mbr 而言默认就是应该存放在最开始的扇区
 # dd if=~/Build-Your-Own-Operating-System/boot/mbr.bin 
 # of=~/Build-Your-Own-Operating-System/hd60M.img bs=512 count=1 conv=notrunc
 dd if=./boot/mbr.bin of=./hd60M.img bs=512 count=1 conv=notrunc
 
-# 对于 loader 而言是自己指定的地方 
+2) 对于 loader 而言是自己指定的地方 
 dd if=./boot/loader.bin of=./hd60M.img bs=512 seek=2 count=1 conv=notrunc
 dd if=./boot/loader.bin of=./hd60M.img bs=512 seek=2 count=4 conv=notrunc
+
 
 # 各参数的意义
 if=FILE # 从文件读取而不是从标准输入读取
@@ -26,6 +35,9 @@ bs=BYTES # bs = block size
 conv=CONVS # conv = convert version
 	   # notrunc
 seek = 2 # 使用 seek 指明向硬盘写入属于的 LBA 逻辑块号
+	 # seek 是从 0 开始数的
+count=200 # 目的是一次往参数of指定的文件中写入200个扇区。
+# dd命令会自己判断写入的数据量，如果参数if指定的文件体积小于count*bs(block size)，只按实际文件大小写入
 
 2 nasm 命令
 
