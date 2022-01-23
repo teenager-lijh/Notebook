@@ -1,6 +1,17 @@
-# 对于 Bochs 虚拟机
-# 在打开虚拟机选择开始模拟后
-# 要输入 c 才能够真正开始模拟 c=continue 
+# 对于 Bochs 虚拟机 # 在打开虚拟机选择开始模拟后 # 要输入 c 才能够真正开始模拟 c=continue 
+
+
+内核是 elf 格式的文件，也就是内核文件中有多余的东西，
+然而之前的 mbr.bin 和 loader.bin 都是 二进制格式的文件 即 bin 类型的
+其中并没有多余的 元信息
+
+RAM 内存布局
+
+1) kernel.bin 0x70000～0x9fbff => 0x2fbff=190KB字节的空间 
+2) loader.bin => 0x900 处是loader.bin
+3) 0x1500作为内核映像的入口地址
+4) 内核的入口虚拟地址是0xc0001500
+
 
 hd60M.img 的硬盘布局
 
@@ -57,4 +68,7 @@ nasm -I include/ -o loader.bin loader.S
 	使用 ctrl + c 来终端 bochs 的运行，再用 c 可以启动 bochs
 
 
-
+4 RPL DPL CPL
+RPL 是选择子中的  0~1 两位
+CPL 是当前正在指当前正在执行的代码所处的代码段的 RPL
+DPL 转移后的目标代码据段的DPL是将来处理器的当前特权级CPL 
