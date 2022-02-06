@@ -12,6 +12,9 @@ gcc -c -o kernel/main.o   kernel/main.c
 # 可以使用 gdb 工具来反汇编 kernel.bin 从而查看程序的入口地址是什么
 # 在gcc编译时可以加个参数 -v（verbose） 显示更多的编译细节
 # -S 可以得到 gcc 编译 C 代码后的汇编代码
+# -I 后边是头文件所在目录的 目录的路径
+# -fno-builtin 参数用于说明不适用 C 的内建函数，防止重名问题
+# -fno-stack-protector 解决错误，不进行栈检查 undefined reference to `__stack_chk_fail_local'
 
 2 ld 链接命令
 ld kernel/main.o -Ttext 0xc0001500 -e main -o kernel/kernel.bin
@@ -24,7 +27,7 @@ ld kernel/main.o -Ttext 0xc0001500 -e main -o kernel/kernel.bin
 # 即默认的entry symbol是_start，除非另行指定
 
 3 readelf 读取 elf 格式的文件信息
-readelf -e file_name 
+readelf -e file_name
 
 
 

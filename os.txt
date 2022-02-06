@@ -1,4 +1,4 @@
-# 对于 Bochs 虚拟机 # 在打开虚拟机选择开始模拟后 # 要输入 c 才能够真正开始模拟 c=continue 
+# 对于 Bochs 虚拟机 # 在打开虚拟机选择开始模拟后 # 要输入 c 才能够真正开始模拟 c=continue
 
 
 内核是 elf 格式的文件，也就是内核文件中有多余的东西，
@@ -7,7 +7,7 @@
 
 RAM 内存布局
 
-1) kernel.bin 0x70000～0x9fbff => 0x2fbff=190KB字节的空间 
+1) kernel.bin 0x70000～0x9fbff => 0x2fbff=190KB字节的空间
 2) loader.bin => 0x900 处是loader.bin
 3) 0x1500作为内核映像的入口地址
 4) 内核的入口虚拟地址是0xc0001500
@@ -28,14 +28,16 @@ dd if=./mbr.bin of=./hd60M.img bs=512 count=1 conv=notrunc
 # The best way is using notrunc, which will not devide the file to many block.
 
 1) 对于 mbr 而言默认就是应该存放在最开始的扇区
-# dd if=~/Build-Your-Own-Operating-System/boot/mbr.bin 
+# dd if=~/Build-Your-Own-Operating-System/boot/mbr.bin
 # of=~/Build-Your-Own-Operating-System/hd60M.img bs=512 count=1 conv=notrunc
 dd if=./boot/mbr.bin of=./hd60M.img bs=512 count=1 conv=notrunc
 
-2) 对于 loader 而言是自己指定的地方 
+2) 对于 loader 而言是自己指定的地方
 dd if=./boot/loader.bin of=./hd60M.img bs=512 seek=2 count=1 conv=notrunc
 dd if=./boot/loader.bin of=./hd60M.img bs=512 seek=2 count=4 conv=notrunc
 
+3) 对于 kernel.bin
+dd if=./kernel/kernel.bin of=./hd60M.img bs=512 count=200 seek=9 conv=notrunc
 
 # 各参数的意义
 if=FILE # 从文件读取而不是从标准输入读取
@@ -61,8 +63,8 @@ nasm -I include/ -o loader.bin loader.S
 # loader.S 是必须传入的一个参数，而 -o 后必须紧跟它对应的参数值
 # 所以 loader.S 不论放在哪里都不会引起歧义
 # -f 指明输出文件的格式，默认是 bin 格式喽 ~
-# 还比如有 elf 和 elf64 
-
+# 还比如有 elf 和 elf64
+# -E 表明只做预处理不做编译
 
 3 终端 Bochs 的运行
 	使用 ctrl + c 来终端 bochs 的运行，再用 c 可以启动 bochs
@@ -71,4 +73,4 @@ nasm -I include/ -o loader.bin loader.S
 4 RPL DPL CPL
 RPL 是选择子中的  0~1 两位
 CPL 是当前正在指当前正在执行的代码所处的代码段的 RPL
-DPL 转移后的目标代码据段的DPL是将来处理器的当前特权级CPL 
+DPL 转移后的目标代码据段的DPL是将来处理器的当前特权级CPL
