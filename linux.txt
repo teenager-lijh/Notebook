@@ -23,12 +23,14 @@ ld kernel/main.o -Ttext 0xc0001500 -e main -o kernel/kernel.bin
 # 可执行文件 = 已经重定位完成的文件 = 链接完成的文件
 # program header table -> program header 用于描述 程序头信息 等价于 段（segment）头信息
 # 段是程序本身的组成部分
-# section header tbale -> section header 用于描述 节头信息  
-# ELF header -> 用于描述各种头 
+# section header tbale -> section header 用于描述 节头信息
+# ELF header -> 用于描述各种头
+
+5 stat file_name
+# 查看文件 file_name 的具体信息，
+# 如 atime=access time  ctime=change time  mtime=modify time
 
 
 
 
 
-
- 
