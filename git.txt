@@ -26,6 +26,7 @@
 	1）http 方式 (私有仓库需要输入密码)
 	git clone 版本库地址.git   [可选：本地文件夹名称]
 	git clone https://gitee.com/songboy/test201907.git project_name
+	git clone git@github.com:teenager-lijh/Notebook.git	
 
 	2) ssh 方式(地址格式有变化,不需要输入密码)
 	git clone git@gitee.com:songboy/test201907.git dir_name 
