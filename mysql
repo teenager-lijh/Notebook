@@ -1,0 +1,191 @@
+1 创建数据库
+    create database database_name;
+
+2 创建表
+    create table students(id int primary key, name varchar(20), card varchar(20));
+
+3 删除表
+    drop table students cascade; // 
+    cascade n.传递过程 -> 表示删除与它相关的视图、触发器、外键
+    restrict 刚好相反
+
+4 查看表接哦古
+    desc table_name;
+
+5 修改表结构->添加新的列
+    alter table table_name add field_name data_type...;
+
+6 修改表结构->修改字段数据类型
+    alter table table_name modify column col_name data_type;
+
+7 修改表结构->修改字段名
+    alter table table_name change column old_name new_name data_type;
+
+8 创建索引
+    在 InnoDB 中主键默认就是聚簇索引
+    create [unique|cluster] index index_name on table_name (field_name_1, field_name_2);
+
+9 聚簇索引
+    聚簇索引：索引和数据存放在一起->找到索引就等同于找到记录->可减少见解查找数据的IO访问
+    非聚簇索引：索引和数据没有存放再一次->找到索引后需要再次IO读取数据
+
+10 查看一张表的索引信息
+    show index from table_name;
+    show index from table_name \G; // 以列的形式显示
+
+
+11 修改一张表中索引的名字->索引名!=字段名
+    alter table table_name rename index old_name to new_name;
+
+
+12 删除一张表中的索引
+    drop index index_name on table_name;
+
+
+
+13 向表中插入行
+    insert into student values ('20215123', 'wangmin', 'nv', 18, 'ma');
+
+
+14 删除表的主键
+    alter table table_name drop primary key;
+
+15 查询结果去重->必须查询出来的所有的列的值都重复才视为重复
+    select distinct s_no from sc;
+
+16 查询附带条件
+    select * from sc where grade >= 90;
+    select * from sc where grade between 85 and 90; // 包含 85 和 90 
+    select * from sc where grade in (85, 90, 80); // 枚举
+    select * from sc where grade like '%0'; // % 模糊匹配 同样使用整型
+    select * from sc where grade like '_0'; // % 代替多个字符 _ 代替一个字符 
+    select * from sc where (grade >= 85 and grade <= 90) or (grade = 92); // 相等用一个等号
+    select * from sc where (grade >= 85 and grade <= 90) or (grade = 92) order by grade desc;
+    // 按照 grade 排序并且按照 grade 递减的顺序从上至下排序，上一行的 grade >= 下一行的 grade
+    // 默认情况下是递增排序 上一行的 grade <= 下一行的 grade
+
+
+17 聚合函数
+    select count(all s_no) from sc; // 统计一列中值的个数
+    select count(distinct s_no, c_no) from sc; // s_no, c_no 列名字
+    // 因为不存在所有行的时候需要去重的情况i
+    // ->所有行不可能有重复的因为有主键 count(distinct *) 不对
+    // distinct 表示去重
+
+    // 同样用法的函数还有 [] -> 可选     <> -> 必选
+    SUM([DISTINCT|ALL] <列名>)
+    AVG | MAX | MIN -> 求一列的平均值 | 最大值 | 最小值 
+    (可选择是否在去重的情况下处理，默认不去重)
+
+18 分组查询
+    select s_no, count(s_no) from sc group by s_no;
+    // s_no 字段在同一张表中可以重复出现，
+    // 但是其他的键值信息并不能直接输出，
+    // 拥有相同的 s_no 字段值的行被分配到一组中去，
+    // 但是在最终显示的时候这一个组的所有行只会显示到一行上
+    // 然而除了 s_no 外的其他行的值并不能保证都相同
+    // 所以分组查询要配合聚合函数使用，其他行使用聚合函数处理成为一个值
+    // 然后进行显示
+    // example: 
+    // 统计各个拥有相同 s_no 值的数量，
+    select s_no, count(s_no) from sc group by s_no;
+    // 输出：
+    // s_no_value_1   number_1
+    // s_no_value_2   number_2
+
+    // -------- 使用分组查询并且希望过滤数据 ----------
+    // 应该使用 Having <过滤数据的条件>
+    // 随便写 ~ 不等于的判断使用 != 也可以用 <> 表示不等于 
+    select s_no, count(s_no) from sc group by s_no having count(s_no)!=3;
+
+19 数据过滤 WHERE 和 HAVING 的区别
+    关于数据过滤：
+        having是在分组后对数据进行过滤.
+        where是在分组前对数据进行过滤
+    关于统计函数使用
+        having后面可以使用分组函数(统计函数)
+        where后面不能使用分组函数
+
+20 连接查询
+    // 使用 where 子句连接查询
+    select * from student, sc where student.no = sc.s_no order by no;
+
+
+21 嵌套查询
+    select * from student where student.no in (select distinct s_no from sc);
+    // in 后边的那一块内容被当作一张表看待
+    // 由于这张表只有一列元素
+    // 所以这一列元素的每一行被当作了一个元素看待（如果一行多个元素也被当作一个元素看？）
+    // 在遍历 student 的过程中，如果 student.no 等于其中某个元素
+    // 那么 student 中对应的那一行被纳入到查询结果中
+
+    select * from student where student.no = any(select distinct s_no from sc as b);
+    // student.no 等于 子查询得到的表中的任意一个元素的时候，该条目被纳入到结果中
+
+    select * from student where not exists(select distinct s_no from sc as b);
+    // where 后边的条件为 True 的时候当前所遍历到的 student 中的那一行被纳入到结果中
+    // 当子查询的结果为空的时候 not exists(子查询) 为 True 而 exists 则相反
+    // exists, not exists, any, all 后边跟括号且在括号里边写子查询的时候
+    // 这些关键字的行为非常像函数的行为，
+
+    select * from student where student.name = 'liuchen' \
+    union select * from student where student.name = 'liyong';
+    // union 合并 union 关键字两边的查询结果到一个结果中去
+    // 两个子查询得到的两个临时表合并为一张临时表
+    
+    select * from student where student.name = 'liuchen' \
+    intersect select * from student where student.name = 'liyong';
+    // 取两者的交集，MySQL 并不支持 INTERSECT 的用法，则只能用其他方法替换
+
+    select * from student where student.name = 'liuchen' \ 
+    except select * from student where student.name = 'liyong';
+    // 取两者的差,从左边的结果中丢弃右边所包含的内容, 
+    // MySQL 并不支持 EXCEPT 的用法，则只能用其他方法替换
+
+22 插入
+    insert into table_name [(field_list)] values (value_list)
+
+23 修改
+    update table_name set field_1 = value_1, field_2 = value_2 ... where condition
+
+24 删除
+    delete from table_name where condition
+
+25 创建视图 VIEW -> 虚拟表
+    视图是物理表的SQL语句执行后产生的表的 引用 
+    -> 当物理表发生变化则视图的数据也就变化了 
+    -> 相当于子查询产生的虚拟表    
+    create view <view_name> as <sql_statement>
+    Example:
+    create view sc_view as select * from sc where grade >= 85;
+    select * from sc_view; // 视图可以当作普通的表来使用，这时候输出了多条内容
+    update sc_view set grade = 84 where s_no = '20215121'; // 这时候只有一条内容了
+    // 因为 sc_view 视图里的数据要符合 grade >= 85 这个条件
+    // 而当我通过视图将某些数据修改为不符合上述条件的值后
+    // 那么那些修改后不符合条件的那些行也就不再属于视图了
+    // 可见，视图是在使用的时候通过执行 SQL 语句即时生成的
+    // 并非创建视图后映射关系就一成不变 而是 动态的变化的
+
+26 查询视图数据 -> 和查询普通的表是一样的用法
+
+27 删除视图
+    drop view view_name [cascade]
+    // cascade 是说->要同时删除建立在当前视图的基础上建立的其他的视图一并删除
+   
+28 更新视图->和更新普通的表的操作一样->但是最终这些更改会反应在物理表上
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
