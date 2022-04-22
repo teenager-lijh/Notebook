@@ -12,7 +12,9 @@ java ==> 运行 java 字节码 （file_name.class 文件）
 
 ## Java 项目结构
 
-![image-20220422103245086](Java-Basic.assets/image-20220422103245086-16505947870101.png)
+![image-20220422103245086](./Java-Basic.assets/image-20220422103245086-16505947870101.png)
+
+
 
 Java-Package（Java 的包）是一组文件夹组成的
 com.lijh.hdfs ==> 三个文件夹 ==> com ==> lijh ==> hdfs
@@ -31,5 +33,7 @@ com.lijh.hdfs ==> 三个文件夹 ==> com ==> lijh ==> hdfs
 Moudle 文件夹拷贝当项目目录下后，通过下图的方式导入
 File ==> Settings ==> Project Structure ==> Modules ==> "+"加号 ==> Import Module
 
-![image-20220422144853484](Java-Basic.assets/image-20220422144853484.png)
+![image-20220422144853484](./Java-Basic.assets/image-20220422144853484.png)
+
+
 
