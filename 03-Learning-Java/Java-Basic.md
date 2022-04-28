@@ -688,7 +688,7 @@ Class cls = object.getClass();
 
 
 
-```
+```java
 // 1 获取成员变量们
 // 获取所有 public 修饰的成员变量
 Field[] getFields();
@@ -703,7 +703,7 @@ Field getDeclaredField();
 
 
 
-```
+```java
 // 2 获取构造方法们
 Constructor<?>[] getConstructors();
 Constructor<T> getConstructor(类<T>...ParameterTypes);
@@ -713,7 +713,7 @@ Constructor<T> getDeclaredConstructor(类<T>...ParameterTyps);
 
 
 
-```
+```java
 // 3 获取成员方法们
 Method[] getMethods()
 Method GetMethod(String name, 类<?>...parameterTypes)
@@ -724,7 +724,7 @@ Method GetDeclaredMethod(String name, 类<?>...parameterTypes)
 
 
 
-```
+```java
 // 4 获取类名
 String getName();
 ```
@@ -737,7 +737,7 @@ String getName();
 
 ### get 方法
 
-```
+```java
 // 设有 Field 对象 field 属于 object 的字段
 // 设有实例对象 object
 
@@ -748,7 +748,7 @@ Object var_name = field.get(Object object)
 
 ### set 方法
 
-```
+```java
 // object 是指具体的要操纵的实例对象
 // value 是指具体要赋的值
 Object var_name = field.get(Object object, Object value)
@@ -756,7 +756,7 @@ Object var_name = field.get(Object object, Object value)
 
 ### setAccessible 方法
 
-```
+```java
 // 忽略安全访问权限
 // 暴力反射 ==> 不做安全检查
 field.setAccessible(true);
@@ -770,24 +770,24 @@ field.setAccessible(true);
 
 # 011 - 注解
 
-### 学习目标
+## 学习目标
 
 1. JDK 中预定义的注解的使用方法
 2. 学习如何自定义注解
 
-### 概念 注解 Annotation
+## 概念 注解 Annotation
 
 1. 注释：给人看的
 2. 注解：给计算机看的，用来说明程序的
 3. 使用注解：@ 符号 + 注解名称 = @AnnotationName
 
-### 作用分类
+## 作用分类
 
 1. 编译检查 ==> @Override
 2. 生成文档 ==> javadoc 命令 ==> 都是用已经定义好的文档
 3. 代码分析 ==> 通过代码里标识的注解对代码进行分析，使用反射
 
-```
+```java
 // 2 生成文档示例
 
 /**
@@ -815,7 +815,7 @@ public class AnnoDemo {
 // 生成一堆文件，打开 index.html 文件
 ```
 
-### JDK 内置注解
+## JDK 内置注解
 
 1. @Override : 检测被该注解标注的方法是否覆盖了父类方法或者接口方法
 2. @Deprecated ：将该注解标注的内容，标注为过时，坚持要使用也是可以的，建议不要使用，不仅可以兼容低版本，还可以提醒使用者使用更新的方法
@@ -823,11 +823,162 @@ public class AnnoDemo {
 
 
 
-```
+```java
 // 3 这样的意思代表压制所有警告
 @SuppressWarnings("all")
 // 可以写带类的上边一行，也可以写在方法的上边一行
 // 写在更大范围的对象上边一行则压制警告的范围也就更大
 ```
 
-下一个视频 ： 自定义注解 465 
+## 自定义注解
+
+
+
+1. 格式  ==> 自定义注解格式
+
+2. 注解的本质 ==> 注解的本质是接口
+
+3. 属性：接口中的抽象方法 = 属性
+   		
+     1) 属性(数值是指成员函数)的返回值类型：基本数据类型，字符串，枚举，注解，以上类型的数组
+     
+     2) 在使用此注解的使用，应该为其属性（成员函数）赋值才可以。可使用 default 关键字为其赋一个默认值，这样就不必在使用的时候强制再次赋值了。如果只有一个属性需要赋值，那么可以省略属性的名称直接在使用注解的时候只写该属性的值即可。
+
+```
+// ps: 反汇编命令
+javap ==> javap fileName.class
+```
+
+```
+// 1 自定义注解 举个例子
+public @interface 注解名 {
+	// ...
+	int int_methodName();
+	String string_methodName();
+	
+	// 可以通过这种方式来赋一个默认值
+	// 那么在使用此注解的时候就不必一定要为它赋值了
+	int my_name_method() default "lijh";
+	
+	// 枚举类型 ==> 赋值
+	enumType enum_method();
+	// 注解类型的方法 ==> 赋值
+	annoType anno_method();
+	// 如果数字中只有一个值，那么在赋值的时候，花括号可以省略 ==> 赋值
+	type[] array_method();
+}
+
+// 注解的使用
+// 因为 赋值的过程非常像属性所以 称 方法 为 属性
+// 赋给方法的值的类型应与此方法的返回值类型保持一致
+@注解名(int_methodName = int_value, string_methodName = string_value, enum_method = enumType.attr, anno_method = @annoType, array_method = {value_1, value_2, value_3})
+public class Worker {
+
+}
+```
+
+
+
+## 元注解
+
+元注解：用于描述注解的注解
+
+### 举个例子
+
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.SOURCE)
+public @interface Override {
+	// ...
+}
+
+// 解析 Target
+// @Target(ElementType.METHOD)
+// Target 来指明 Override 注解应在用在什么地方
+// ElementType.METHOD 表明此注解应该用在类方法上边
+
+// 解析 Retention
+// 指明此注解被保留的时间持续到什么时候
+// RetentionPolicy.SOURCE 表明在源码阶段
+// Java 运行程序的三个阶段
+// 源码阶段 ==> 加载阶段 ==> 运行阶段
+```
+
+### 需要掌握的元注解
+
+1. @Target : 描述注解能够作用的位置
+2. @Retention : 描述注解被保留的阶段
+3. @Documented : 描述注解是否被抽取到 API 文档中，使用 javadoc 进行文档生成的时候，是否告诉读者那些使用此定义注解标注过的对象是使用过此自定义注解标注的，也就是说自定义注解是可以被抽取到 javadoc 文档中的
+4. @Inherited：描述此注解是否被子类继承，若使用此注解描述自定义注解，那么子类会自动继承父类使用的注解
+
+```java
+// 1 @Target
+// ElementType ==> 枚举类型
+@Target(ElementType.Type) // 只能作用于类上
+@Target(ElementType.METHOD) // 只能作用于方法上
+@Target(ElementType.FIELD) // 只能作用于成员变量上
+@Target(value={ElementType.Type, ElementType.METHOD, ElementType.FIELD}) // 三者都能作用
+
+// 2 @Retention
+// RetentionPolicy ==> 枚举类型
+@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.CLASS)
+// 运行时可通过被描述的自定义注解所标注的对象读取到该注解
+@Retention(RetentionPolicy.RUNTIME) 
+
+// 3 @Documented
+// 使用该元注解修饰过的自定义注解
+// 则 自定义注解所标识过的  对象
+// 在生成文档的时候，会告诉读者
+// 此  对象 是使用此自定义注解标注过的
+
+// 4 @Inherited
+// 若自定义注解使用 @Inherited 描述
+// 那么，使用此自定义注解的对象若被继承
+// 则子对象也会自动默认使用了该自定义注解标注
+```
+
+
+
+## 解析注解 注解的作用
+
+1. 在程序使用（解析）注解：获取注解中定义的属性值，大多数可以用来简化配置文件，比如 Web 框架的 URL 描述
+2. 若该注解放在一个方法上的，那么这个方法也是又 getAnnotation 方法的，同样可以获取到此方法的注解对象，成员变量（字段 Field）也是同理的
+
+```
+// 定义注解 
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Pro {
+    String className();
+    String methodName();
+}
+
+// (1)定义注解 ==> (2)自动生成一个类(该类包含那些属性，以及见解访问属性的抽象方法) 
+// ==> (3)使用一次注解就实例化一个该类的实例化对象
+
+// 使用一次注解 ==> 就相当于生成了一个该接口的实现类的实例化对象
+@Pro(className = "hello", methodName = "666")
+public class ReflectTest {
+	public static void main(String[] args) throws Exception {
+		// 1 获取被注解的类的字节码对象 即该类的 Class 对象
+		Class<ReflectTest> reflect_test_class = ReflectTest.class;
+		
+		// 2 获取注解对象 ==> 获取实例化对象
+		// Pro[] pro reflect_test_class.getAnnotations();
+		// 一个类可以被很多注解描述，指明获取 Pro.class 类型的注解
+		// Pro pro 定义了引用，指向了它的实现类对象，这其实就是多态啊！
+		Pro pro = reflect_test_class.getAnnotation(Pro.class);
+		
+		// 3 调用注解对象中定义的抽象方法，获取返回值
+		// 到这里也就明白了，注解中的抽象方法会被自动实现称为属性值的返回方法
+		// 即会被自动实现称为间接获取属性值的方法，达到属性与方法属性统一的代码
+		// 其实就是在内存中自动生成了一个 该注解类型的 子类接口的实现对象
+		// 注解的本质是接口
+		String ss = pro.className();
+		
+		// result:知道某个类的 全类名=包名.类名 后就可以通过反射机制来使用此类了
+	}
+}
+```
+
