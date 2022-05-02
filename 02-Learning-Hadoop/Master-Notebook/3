@@ -6,12 +6,12 @@ HDFS概述
 	5) large data sets
 
 	HDFS是一个分布式的文件系统
-
+	
 	文件系统：Linux、Windows、Mac....
 		目录结构: C    /
 		存放的是文件或者文件夹
 		对外提供服务：创建、修改、删除、查看、移动等等
-
+	
 	普通文件系统 vs  分布式文件系统
 		单机
 		分布式文件系统能够横跨N个机器
@@ -33,12 +33,12 @@ HDFS的架构 *****
 	
 	1) NameNode(master) and DataNodes(slave)
 	2) master/slave的架构
-	3) NN: 
+	3) NN: （NameNode）
 		the file system namespace
 			/home/hadoop/software
 						/app
 		regulates access to files by clients
-	4）DN：storage
+	4）DN：storage (DataNode 数据节点)
 	5）HDFS exposes a file system namespace and allows user data to be stored in files.
 	6）a file is split into one or more blocks
 		blocksize: 128M 
@@ -50,15 +50,15 @@ HDFS的架构 *****
 		a.txt  150M   blocksize=128M
 		a.txt 拆分成2个block   一个是block1：128M  另一个是block2：22M
 		block1存放在哪个DN？block2存放在哪个DN？
-
+	
 		a.txt
 			block1：128M, 192.168.199.1
 			block2：22M,  192.168.199.2
-
+	
 		get a.txt
-
+	
 		这个过程对于用户来说是不感知的
-
+	
 	10）通常情况下：1个Node部署一个组件
 
 
@@ -83,7 +83,6 @@ HDFS的架构 *****
 		我OOTB环境中创建的hadoop用户是有sudo权限：sudo vi /etc/hosts
 	Linux版本：
 		以前的课程是centos6.4，本次课程升级成centos7
-
 
 Hadoop环境搭建
 	使用的Hadoop相关版本：CDH
@@ -124,7 +123,7 @@ Hadoop安装前置要求
 	-rw------- 1 hadoop hadoop 1679 10月 15 02:54 id_rsa  私钥
 	-rw-r--r-- 1 hadoop hadoop  398 10月 15 02:54 id_rsa.pub 公钥
 	-rw-r--r-- 1 hadoop hadoop  358 10月 15 02:54 known_hosts
-
+	
 	cat id_rsa.pub >> authorized_keys
 	chmod 600 authorized_keys
 
@@ -141,7 +140,7 @@ Hadoop(HDFS)安装
 			    <name>fs.defaultFS</name>
 			    <value>hdfs://hadoop000:8020</value>
 			</property>
-
+	
 		hdfs-site.xml
 			<property>
 			    <name>dfs.replication</name>
@@ -152,7 +151,7 @@ Hadoop(HDFS)安装
 			    <name>hadoop.tmp.dir</name>
 			    <value>/home/hadoop/app/tmp</value>
 			</property>
-
+	
 		slaves
 			hadoop000
 	启动HDFS：
@@ -163,7 +162,7 @@ Hadoop(HDFS)安装
 			60002 DataNode
 			60171 SecondaryNameNode
 			59870 NameNode
-
+	
 			http://192.168.199.233:50070
 			如果发现jps ok，但是浏览器不OK？ 十有八九是防火墙问题
 			查看防火墙状态：sudo firewall-cmd --state
