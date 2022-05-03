@@ -990,7 +990,7 @@ public class ReflectTest {
 
 
 
-# 012-Hash-Set
+# 012-HashSet
 
 `java.util.Set` 接口继承了 `Collection` 接口
 
@@ -1114,6 +1114,8 @@ LinkedHashSet = 数组 + 红黑树（提高查询的效率）+ 链表（记录�
 3. `static <T extends Comparable<? super T>> sort(List<T> list) `
 4. `static <T> void sort(List<T> list, Comparator<? super T> c)`
 
+## Collection.addAall()
+
 ```java
 // 1 static <T> boolean addAll(Collection<? super T> c, T... elements)
 // 向容器 Collection 中添加多个元素
@@ -1138,6 +1140,8 @@ public class HelloWorld {
 ```
 
 
+
+## Collection.shuffle()
 
 ```java
 // 2 static void shuffle(List<?> list)
@@ -1168,6 +1172,8 @@ public class HelloWorld {
 ```
 
 
+
+## Sort And Comparable
 
 ```java
 // 3 static <T extends Comparable<? super T>> sort(List<T> list)
@@ -1250,11 +1256,59 @@ public class HelloWorld {
 
 
 
-```
+## Sort And Comparator
+
+```java
 // 4 static <T> void sort(List<T> list, Comparator<? super T> c)
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
+public class HelloWorld {
+
+    public static void main(String[] args) throws Exception {
+        ArrayList<Person> arr = new ArrayList<Person>();
+        Person person01 = new Person("lijh", 22);
+        Person person02 = new Person("liyr", 23);
+        Person person03 = new Person("zz", 24);
+
+
+        Collections.addAll(arr, person03, person02, person01);
+
+        System.out.println(arr);
+
+        // 对 arr 排序
+        // 创建一个匿名类 ==> 可使用实现接口为特点的多态特性
+        Collections.sort(arr, new Comparator<Person>() {
+            @Override
+            public int compare(Person o1, Person o2) {
+                return o1.age - o2.age;
+            }
+        });
+
+        System.out.println(arr);
+    }
+}
 ```
 
 
+
+# 015-Map
+
+Map<K, V> ==> 是个接口
+
+常用实现类：
+
+1. HashMap ==> 哈希表 + 链表 OR 红黑树（迭代无序）
+2. LinkedHashMap ==> 哈希表 + 链表 OR 红黑树 + 链表（迭代有序）
+
+## HashMap
+
+- 实现了 Map<K, V>
+
+常用方法：
+
+1. `V put(K key, V value)  ` ==> 添加元素
+2. 
 
