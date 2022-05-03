@@ -460,6 +460,12 @@ Parent parent = new parent();
 
 
 
+## 匿名类
+
+类似多态的方式来引用创建出来的实例对象
+
+==> `被继承的接口/被继承的类 = new <被继承的接口 OR 被继承的类> { 实现主体 };`
+
 ## 多态性
 
 一个对象拥有多种形态，这是对象的多态性
@@ -469,7 +475,7 @@ Parent parent = new parent();
 
 多态性的前提：
 
-1. extends 继承
+1. extends 继承 ==> 继承类 OR 实现接口 ==> 都 OK
 2. implements 实现 是多态性的前提
 
 代码中体现多态性：
@@ -981,4 +987,274 @@ public class ReflectTest {
 	}
 }
 ```
+
+
+
+# 012-Hash-Set
+
+`java.util.Set` 接口继承了 `Collection` 接口
+
+Java 中的 hashCode方法来自于 Object 类，默认的 hashCode 方法返回的是此对象的逻辑地址值（JVM 中的逻辑地址），但是此方法可以被覆盖重写。而对象的引用变量是物理地址（操作系统层面的虚拟地址）
+
+从 java1.8 开始
+
+1. 哈希表 = 数组 + 链表
+2. 哈希表 = 数组 + 红黑树（提高查询的效率）
+
+
+
+Set 接口的特点:
+
+1. 不允许存储重复的元素 ==> 并且无序
+2. 没有索引，没有带索引的方法，也不能使用普通的 for 循环，可以使用增强版的 for 循环来遍历里边的元素
+
+实现 Set 接口的两个类：
+
+1. `java.util.HashSet` 是一个无序的集合，底层实现是哈希表
+
+
+
+## Hash Set 基础使用方法
+
+```java
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+		// Set 是一个接口
+        // HashSet 是 Set 接口的实现类
+        Set<Integer> set = new HashSet<Integer>();
+		
+		// 像 HashSet 中添加元素
+        set.add(1);
+        set.add(2);
+        set.add(3);
+
+        // 使用迭代器遍历 set
+        Iterator<Integer> iter = set.iterator();
+        while(iter.hasNext()) {
+            Integer value = iter.next();
+            System.out.println(value);
+        }
+
+        // 使用 for 语句遍历 set
+        for(int value : set) {
+            System.out.println(value);
+        }
+```
+
+
+
+## LinkedHashSet
+
+LinkedHashSet = 数组 + 红黑树（提高查询的效率）+ 链表（记录元素存储顺序，从而保证元素有序）
+
+```java
+        LinkedHashSet<String> linked_set = new LinkedHashSet<String>();
+
+        linked_set.add("hello world.");
+        linked_set.add("123123123");
+        linked_set.add("666666666666");
+
+        // 使用迭代器遍历 linked hash set
+        Iterator<String> linked_iter = linked_set.iterator();
+        while(linked_iter.hasNext()) {
+            System.out.println(linked_iter.next());
+        }
+
+        // 使用 for 语句遍历 linked_set
+        for(String item : linked_set) {
+            System.out.println(item);
+        }
+```
+
+
+
+# 013-可变参数列表
+
+注意事项：
+
+1. 可变参数的底层实现是数组对象
+2. 如果方法的参数有多个，那么可变参数必须写在参数列表的末尾
+3. 一个方法只有一个可变参数列表，即使类型不同也不能有多个
+4. 可变参数列表的终极写法 `Object...arr`，可以接受任意类型
+
+```java
+	// 1 普通写法
+	public static int[] add(int...arr) {
+        return arr;
+    }
+
+	// 2 终极写法 
+	public static int[] add(Object...arr) {
+        return arr;
+    }
+    
+	// 普通写法的输出
+    public static void main(String[] args) throws Exception {
+
+
+        int[] arr = add(1, 2, 3);
+
+        for(int i = 0 ; i < arr.length ; ++i) {
+            System.out.print(arr[i]);
+        }
+
+    }
+```
+
+# 014-Collections
+
+- `java.utils.Collections` 是集合类工具，用来对集合进行操作
+
+
+
+1. `static <T> boolean addAll(Collection<? super T> c, T... elements)`
+2. `static void shuffle(List<?> list) `
+3. `static <T extends Comparable<? super T>> sort(List<T> list) `
+4. `static <T> void sort(List<T> list, Comparator<? super T> c)`
+
+```java
+// 1 static <T> boolean addAll(Collection<? super T> c, T... elements)
+// 向容器 Collection 中添加多个元素
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class HelloWorld {
+
+    public static void main(String[] args) throws Exception {
+        ArrayList<String> arr = new ArrayList<String>();
+
+        // 使用 Collections.addAll() 来一次性添加多个元素到容器 arr 中
+        // addAll 是一个静态方法 ==> 可以直接调用
+        // ==> 第一个参数传入待操作对象
+        // ==> 第二个参数传入数据
+        Collections.addAll(arr, "1", "2", "3");
+
+    	   System.out.println(arr);
+    }
+}
+```
+
+
+
+```java
+// 2 static void shuffle(List<?> list)
+// 打乱集合中的元素
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class HelloWorld {
+
+    public static void main(String[] args) throws Exception {
+        ArrayList<String> arr = new ArrayList<String>();
+
+        // 使用 Collections.addAll() 来一次性添加多个元素到容器 arr 中
+        // addAll 是一个静态方法 ==> 可以直接调用
+        // ==> 第一个参数传入待操作对象
+        // ==> 第二个参数传入数据
+        Collections.addAll(arr, "1", "2", "3");
+
+        System.out.println(arr);
+
+        Collections.shuffle(arr);
+
+        System.out.println(arr);
+
+    }
+}
+```
+
+
+
+```java
+// 3 static <T extends Comparable<? super T>> sort(List<T> list)
+// 对容器中的元素排序 ==> 默认为升序排序
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class HelloWorld {
+
+    public static void main(String[] args) throws Exception {
+        ArrayList<String> arr = new ArrayList<String>();
+
+        // 使用 Collections.addAll() 来一次性添加多个元素到容器 arr 中
+        // addAll 是一个静态方法 ==> 可以直接调用
+        // ==> 第一个参数传入待操作对象
+        // ==> 第二个参数传入数据
+        Collections.addAll(arr, "2", "1", "3");
+
+        System.out.println(arr);
+
+        // 对 arra 排序
+        Collections.sort(arr);
+
+        System.out.println(arr);
+
+    }
+}
+
+// 自定义类型的排序 ==> 实现泛型接口 Comparable ==> compareTo 方法
+
+import java.lang.Comparable;
+
+public class Person implements Comparable<Person> {
+
+    String name;
+    int age;
+
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public int compareTo(Person anotherPerson) {
+        // 返回值 < 0 ==> 左边的值比右边的值 anotherPerson 要小
+        // 返回值 > 0 ==> 左边的值比右边的值 anotherPerson 要大
+        // 返回值 == 0 ==> 成立 ==> 左边的值等于右边的值
+        return age - anotherPerson.age;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + age;
+    }
+}
+
+
+public class HelloWorld {
+
+    public static void main(String[] args) throws Exception {
+        ArrayList<Person> arr = new ArrayList<Person>();
+        Person person01 = new Person("lijh", 22);
+        Person person02 = new Person("liyr", 23);
+        Person person03 = new Person("zz", 24);
+
+
+        Collections.addAll(arr, person03, person02, person01);
+
+        System.out.println(arr);
+
+        // 对 arr 排序
+        Collections.sort(arr);
+
+        System.out.println(arr);
+
+    }
+}
+```
+
+
+
+```
+// 4 static <T> void sort(List<T> list, Comparator<? super T> c)
+
+
+```
+
+
 
