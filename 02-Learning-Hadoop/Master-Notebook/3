@@ -189,7 +189,6 @@ hadoop软件包常见目录说明
 
 
 
-
 HDFS命令行操作   *****
 	shell-like
 		mkdir  ls ....
@@ -219,7 +218,7 @@ hadoop fs [generic options]
 	[-text [-ignoreCrc] <src> ...]
 
 hadoop常用命令：
-hadoop fs -ls /
+hadoop fs -ls /  ==> hadoop fs -ls = hadoop fs -ls /user/hadoop
 hadoop fs -put
 hadoop fs -copyFromLocal
 hadoop fs -moveFromLocal

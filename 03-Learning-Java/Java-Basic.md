@@ -669,7 +669,7 @@ Class.forName("全类名") // forName 静态方法
     
 // 2 已经加载进内存了，但是还没有实例化对象
 // 多用于参数的传递
-类名.class
+类名.class // .class 文件在 JVM 内存中的对象
     
 // 3 已经有实例化对象了
 // 多用于对象的获取字节码的方式
@@ -679,8 +679,12 @@ Class.forName("全类名") // forName 静态方法
 // 以上三种方法获取的都是同一个 Class 对象
 // 一个字节码文件，在程序的一次运行中，只会被加载一次
 
-import java.lang.Class;
+import java.lang.Class; 
 Class cls = object.getClass();
+Class<?> cls = object.getClass(); // 符号 '?' 是通配符
+
+// 创建实例对象 ==> newInstance 方法
+Object object = cls.newInstance();
 ```
 
 
@@ -832,7 +836,7 @@ public class AnnoDemo {
 ```java
 // 3 这样的意思代表压制所有警告
 @SuppressWarnings("all")
-// 可以写带类的上边一行，也可以写在方法的上边一行
+// 可以写在类的上边一行，也可以写在方法的上边一行
 // 写在更大范围的对象上边一行则压制警告的范围也就更大
 ```
 
@@ -855,7 +859,7 @@ public class AnnoDemo {
 javap ==> javap fileName.class
 ```
 
-```
+```java
 // 1 自定义注解 举个例子
 public @interface 注解名 {
 	// ...
@@ -951,7 +955,7 @@ public @interface Override {
 1. 在程序使用（解析）注解：获取注解中定义的属性值，大多数可以用来简化配置文件，比如 Web 框架的 URL 描述
 2. 若该注解放在一个方法上的，那么这个方法也是又 getAnnotation 方法的，同样可以获取到此方法的注解对象，成员变量（字段 Field）也是同理的
 
-```
+```java
 // 定义注解 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -1310,5 +1314,221 @@ Map<K, V> ==> 是个接口
 常用方法：
 
 1. `V put(K key, V value)  ` ==> 添加元素
-2. 
+2. `V remove(Object key)  ` ==> 删除元素
+3. `V get(Object key)  ` ==> 获取 key 对应的 value
+4. `public boolean containsKey(Object key)` ==> true ==> 包含 key
+5. `public Set<K> keySet()` ==> 用 Set 存储所有的 keys 并返回
+6. `public Set<Map.Entry<K,V>> entrySet()` ==> 获取 Map 中所有键值对对象（Entry<K, V>） 的集合
+
+
+
+### put 方法
+
+```java
+// 若不存在元素则返回 null 否则 返回 旧的 value
+
+import java.util.*;
+
+public class HelloWorld {
+
+    public static void main(String[] args) throws Exception {
+
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+        map.put(1, 2);
+        map.put(3, 4);
+
+        Integer res = map.put(1, 666);
+        System.out.println(res); // res = 2
+
+        res = map.put(5, 777);
+        System.out.println(res); // res = null
+
+    }
+}
+```
+
+
+
+
+
+### remove方法
+
+```java
+// 删除 key 对应的键值对应映射
+// 存在 key ==> return Value
+// 不存在 key ==> return null
+
+import java.util.*;
+
+public class HelloWorld {
+
+    public static void main(String[] args) throws Exception {
+
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+        map.put(1, 23);
+        map.put(3, 4);
+
+        System.out.println(map); //{1=23, 3=4}
+
+        Integer res01 = map.remove(1); // res01 = 23
+        Integer res02 = map.remove(2); // res02 = null
+        // 若 res01 是 int 类型则是自动拆箱 Integer ==> int 自动转换
+        // null 不能被赋值给 int 类型
+
+        System.out.println(map); //{3=4}
+
+        System.out.println(res01); // res01 = 23
+        System.out.println(res02); // res02 = null
+
+    }
+}
+```
+
+
+
+### get 方法
+
+```java
+// 若存在则返回 value 不存在则返回 null
+import java.util.*;
+
+public class HelloWorld {
+
+    public static void main(String[] args) throws Exception {
+
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+        map.put(1, 2);
+        map.put(3, 4);
+
+        Integer res01 = map.get(1);
+        System.out.println(res01); // res01 = 2
+
+        Integer res02 = map.get(2);
+        System.out.println(res02);  // res02 = null
+
+    }
+}
+```
+
+
+
+
+
+### containsKey 方法
+
+```java
+// 返回一个布尔值，若包含 key ==> true， 若不包含 ==> false
+import java.util.*;
+
+public class HelloWorld {
+
+    public static void main(String[] args) throws Exception {
+
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+        map.put(1, 2);
+        map.put(3, 4);
+
+        boolean res01 = map.containsKey(1);
+        System.out.println(res01); // res01 = true
+
+        boolean res02 = map.containsKey(6);
+        System.out.println(res02); // res02 = false
+
+    }
+}
+```
+
+
+
+### keySet 方法
+
+```java
+// keySet 方法返回一个 Set 接口的实现类
+
+import java.util.*;
+
+public class HelloWorld {
+
+    public static void main(String[] args) throws Exception {
+
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+        map.put(1, 11);
+        map.put(2, 22);
+        map.put(3, 33);
+
+        System.out.println(map);
+
+        Set<Integer> key_set = map.keySet();
+
+        // 1 使用迭代器遍历 key_set
+        Iterator<Integer> iter = key_set.iterator();
+        while(iter.hasNext()) {
+            System.out.print(iter.next() + " ==> ");
+        }
+
+        // 2 使用 for 语句遍历 key_set
+        for(Integer item : key_set) {
+            System.out.print(item + " ==> ");
+        }
+
+    }
+}
+```
+
+
+
+### Map.Entry  对象
+
+- Entry ==> 词典的条目（示意） ==> 记录了一个 key 到 value 的映射关系
+- Entry 是 Map 接口的一个嵌套接口，因为只有在访问 Map 的时候才会想到用它
+
+### entrySet 方法
+
+```java
+// 返回所有映射关系的 Entry 元素的集合
+
+import java.util.*;
+
+public class HelloWorld {
+
+    public static void main(String[] args) throws Exception {
+
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+        map.put(1, 11);
+        map.put(2, 22);
+        map.put(3, 33);
+
+        System.out.println(map);
+
+        Set<Map.Entry<Integer, Integer>> entry_set = map.entrySet();
+
+        // 1 使用迭代器遍历 entry_set
+        Iterator<Map.Entry<Integer, Integer>> iter = entry_set.iterator();
+
+        while(iter.hasNext()) {
+            System.out.print(iter.next() + " ==> ");
+        }
+
+        System.out.println("");
+
+        // 2 使用 enhanced for statement 来遍历 entry_set
+        for(Map.Entry<Integer, Integer> item : entry_set) {
+            System.out.print(item + " ==> ");
+        }
+
+    }
+}
+```
+
+
+
+
+
+## LinkedHashMap
 
