@@ -1,0 +1,186 @@
+# Latex 常用数学公式写法
+
+一个参考网站：
+
+[](https://mathpretty.com/11235.html#Latex%E7%9A%84%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95)
+
+## 大于等于
+
+$$
+\begin{equation} \label{1_5}
+    \begin{aligned}
+        a \geq b & \cdots \mbox{geq, 大于等于} \\
+        a \leq b & \cdots \mbox{leq, 小于等于}
+    \end{aligned}
+\end{equation}
+$$
+
+## 不等于
+
+$$
+\begin{equation}
+    a \neq b
+\end{equation}
+$$
+
+## 约等于
+
+`&` 符号用来对齐，按照 & 作为一条竖线，对齐所有公式
+$$
+\begin{equation} \label{1_5}
+    \begin{aligned}
+        1line& \cdots a \approx b \\
+        &2line \cdots \leq or \le \\
+        &3line \ll \\
+        &4line \prec \\
+        &5line \preceq \\
+        &6line \subset \\
+        &7line \sqsubset \mbox{square sub set} \\
+        &8line \sqsubseteq \mbox{square sub set equal} \\
+        &9line \in \\
+        &10line \vdash \\
+        &11line \mid \\
+        &12line \smile \\
+        &13line \geq or \ge \mbox{greater equal} \\
+        &14line \gg \mbox{远远大于} \\
+        &15line \succ \\
+        &16line \supset \\
+        &17line \supseteq \\
+        &18line \sqsupseteq \\
+        &19line \ni and \owns \\
+        
+        
+    \end{aligned}
+
+\end{equation}
+$$
+
+## 叉乘
+
+$$
+a \times b \\
+a \cdot b 
+$$
+
+## 除法
+
+$$
+a \div b \approx c
+$$
+
+## 根号
+
+$$
+\sqrt{x} \\
+\sqrt{ x^{2} + \sqrt{y} } \\
+\sqrt[3]{2} \\
+\surd[x+y]
+$$
+
+## 任意和存在
+
+$$
+\forall s \in S \\
+\exists s \in S
+$$
+
+$$
+
+$$
+
+## 求极限
+
+$$
+\lim_{n \to \infty}{(\frac{n+2}{n+3})^{n}}
+$$
+
+## 微分算子的应用
+
+$$
+\begin{equation}
+    \begin{aligned}
+    \Delta w & = -\frac{1}{2} \alpha \nabla_{w} J(w) \\
+    & = \alpha E_{\pi}[(v_{\pi}(S) - x(S)^\top w)] \nabla_{w} (x(S)^\top w)  \\
+    & = \alpha (v_{\pi}(S) - x(S)^\top w) x(S)
+    \end{aligned}
+\end{equation}
+$$
+
+## 偏导数和导数
+
+$$
+\begin{equation}
+    \begin{aligned}
+    & = \frac{\partial{\epsilon }}{\partial{x}} \\
+    & = \frac{\mathrm{d}y}{\mathrm{d}x_1} + \frac{\mathrm{d}y}{\mathrm{d}x_2}
+    \end{aligned}
+\end{equation}
+$$
+
+## 各种括号
+
+$$
+\begin{equation} \label{1_6}
+    \begin{aligned}
+        \left\{ A \right\} & \cdots \mbox{花括号} \\
+        \left| A \right| & \cdots \mbox{单竖线} \\
+        \left\| A \right\| & \cdots \mbox{双竖线} \\
+        \left \langle A \right \rangle & \cdots \mbox{角括号} \\
+        \left \lfloor A \right\rfloor & \cdots \mbox{下取证} \\
+        \left \lceil A \right\rceil & \cdots \mbox{上取证}
+    \end{aligned}
+\end{equation}
+$$
+
+## 各种删除线
+
+$$
+\begin{equation}
+    \begin{aligned}
+        x+\cancel{5y}=0 \\
+        x+\bcancel{5y}=0 \\
+        x+\xcancel{5y}=0 \\
+        x+\cancelto{\infty}{5y}=0
+    \end{aligned}
+\end{equation}
+$$
+
+
+$$
+\begin{equation}
+    \frac{\cancel{(x+1)}(x+2)}{\cancel{(x+1)}(x+3)}
+    =
+    \frac{x+2}{x+3}
+\end{equation}
+$$
+
+## 集合符号
+
+$$
+\begin{align}
+    & \mathbb{R}, \mbox{实数集} \label{part1:1}\\
+    & \mathbb{Z}, \mbox{整数集} \label{part1:2}\\
+    & \subset, \mbox{真包含} \label{part1:3}\\
+    & \subseteq, \mbox{包含} \label{part1:4}\\
+    & \in, \mbox{属于} \label{part1:5}\\
+    & \cap, \mbox{交集} \label{part1:6}\\
+    & \cup, \mbox{并集} \label{part1:7}\\
+    & \mid, \mbox{或} \label{part1:8}\\
+    & \notin, \mbox{不属于} \label{part1:9}
+\end{align}
+$$
+
+## 各种空格
+
+$$
+\begin{align}
+    & a \qquad b, \mbox{两个宽度} \label{part2:1}\\
+    & a \quad b, \mbox{一个宽度} \label{part2:2}\\
+    & a \ b, \mbox{大空格} \label{part2:3}\\
+    & a \; b, \mbox{中等空格} \label{part2:4} \\
+    & a \, b, \mbox{小空格} \label{part2:5} \\
+    & a \! b, \mbox{紧贴} \label{part2:6}
+\end{align}
+$$
+
+## 各种箭头
