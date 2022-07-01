@@ -32,7 +32,7 @@
 	git clone git@gitee.com:songboy/test201907.git dir_name 
 	当前用户的主目录存在一个.ssh的文件夹，并且里面已经存在私钥文件，
 	如果没有的话我们可以通过 ssh-keygen(generate)，生成一份公钥与私钥，
-
+	
 	3) 更新代码 (适用于两种形式)	
 	git pull 远端代码有变动，更新本地代码
 
@@ -60,15 +60,15 @@
 	
 	3) 撤销文件的改动	
 	git checkout README.md
-
+	
 	4) 添加文件到缓存区
 	git add [dir_name or text_name] # 添加单个文件或目录
 	git add . # 添加所有文件到缓存区
-
+	
 	5) 提交代码到本地仓库
 	git commit [dir_name or text_name] -m # 提交单个文件或目录到本地仓库
 	git commit . -m “这是备注信息” # 提交所有文件到本地仓库
-
+	
 	6) 推送代码到远端仓库
 	git push
 
@@ -78,12 +78,12 @@
 	2) 查看暂存区代码修改 （与版本库最后一次记录比较）	
 	git diff --cached  file_name
 	3) 和指定历史记录比较
-	git log # 找到指定历史记录的 hash_value
-	git diff hash_value # 比较工作区和指定历史记录的代码
-	git diff --cached hash_value # 比较暂存区和指定历史记录的代码
-	git diff HEAD # 比较未 commit 的代码与最新历史记录(也可以用哈希值)	
-		      # 包含暂存区和工作区
-	git diff hash_value1  hash_value2 # 比较指定的两次历史记录
+	git log   找到指定历史记录的 hash_value
+	git diff hash_value   比较工作区和指定历史记录的代码
+	git diff --cached hash_value   比较暂存区和指定历史记录的代码
+	git diff HEAD   比较未 commit 的代码与最新历史记录(也可以用哈希值)	
+		        包含暂存区和工作区
+	git diff hash_value1  hash_value2   比较指定的两次历史记录
 
 	1 工作区，是指目前改动的内容还未使用git add临时存储
 	2 暂存区，是指改动的内容已经临时存储，还未正式通过git commit提交
@@ -91,58 +91,62 @@
 	4 查看暂存区的额外参数为--cached
 
 09 忽略文件权限信息
-	git config core.filemode false #当前版本库
- 	git config --global core.fileMode false # 全局忽略
-	cat .git/config # 配置后查看配置文件的变化 
+	git config core.filemode false  当前版本库
+ 	git config --global core.fileMode false   全局忽略
+	cat .git/config   配置后查看配置文件的变化 
 	
 10 忽略上传某些文件
 	1)
 	添加 .gitignore 文件 文件中写入需要忽略的文件名或目录名
 	检查某个文件是否被成功忽略
-	2) 
-	忽略目录下的所有文件 dir_name/*
+
+	2) 忽略目录下的所有文件 dir_name/*
 	3)
-	git check-ignore -v 文件名 # git 会返回第几行忽略了该文件
+	git check-ignore -v 文件名   git 会返回第几行忽略了该文件
 	4)
 	不修改 .gitignore 情况下强制添加文件
-	git add -f file_name # f = force
+	git add -f file_name  其中 f = force
 	5)
 	反向排除，即此文件不被忽略
-	!/test/index.php # 排除 test 目录下的 index.php 文件
-	6) 
-	git rm --cached file_name # 删除某文件的缓存	
+	!/test/index.php   排除 test 目录下的 index.php 文件
+	
+	6) git rm --cached file_name   删除某文件的缓存	
 	7)
-	git rm -r --cached dir_name/ # 删除某目录的缓存
+	git rm -r --cached dir_name/   删除某目录的缓存
 	8) 
 	git add -f [file_name or dir_name] 
-	# 之所要强制添加是为了删除文件缓存后，再生成一份新的缓存
-	# 但是这个方法在我的版本的 git 上并不能行
+	
+	之所要强制添加是为了删除文件缓存后，再生成一份新的缓存
+	
+	但是这个方法在我的版本的 git 上并不能行
+	
 	9) 
 	git update-index --assume-unchanged file_name 强制忽略文件  
 	git update-index --no-assume-unchanged file_name  取消强制忽略文件 
 
-
 11 查看分支
 	1） 查看本地分支
-	git branch # 绿色代表当前所处分支
+	git branch   绿色代表当前所处分支
 	2)  查看远程和本地的所有分支
-	git branch -a # a = all
+	git branch -a  其中：a = all
 
 12 新建分支
 	1) 切换分支 = 本地没有但远程有则复制过来
-	git checkout branch_name # 需要保证本地或者远程存在此分支
-	# 本质上切换的是 HEAD 的指向，git checkout 引用名或者具体的节点
-	git switch branch_name # 新命令
+	git checkout branch_name   需要保证本地或者远程存在此分支
+	
+	本质上切换的是 HEAD 的指向，git checkout 引用名或者具体的节点
+	
+	git switch branch_name   新命令
 	2) 新建本地分支
-	git checkout -b test # 此时远程不存在此分支名不能直接推送
-	git push --set-upstream origin test # 首次推送新分支的时候
+	git checkout -b test   此时远程不存在此分支名不能直接推送
+	git push --set-upstream origin test   首次推送新分支的时候
 
 13 合并分支
-	git merge test # 将 test 分支合并到主分支
+	git merge test   将 test 分支合并到主分支
 	
 14 删除分支
-	git branch -d branch_name # 普通删除分支 d = delete
-	git branch -D branch_name # 强制删除分支 D = Delete
+	git branch -d branch_name   普通删除分支 d = delete
+	git branch -D branch_name   强制删除分支 D = Delete
 
 15 比较不同分支之间的差异
 	1)查看哪些文件被修改了(比较分支1 和 分支2)
@@ -150,10 +154,12 @@
 	2)显示某个文件的具体差异或者具体修改
 	git diff branch_name_1 branch_name_2 file_name
 	@@@ -n +m @@@ # 代表删除了 n 行 添加了 m 行
-	- 内容1 # 代表删除了内容 1
-	+ 内容2 # 代表增加了内容 2
-	3) 显示全部被修改文件的具体差异或者具体修改
-	git diff branch_name_1 branch_name_2
+
++内容1   代表删除了内容 1
++内容2   代表增加了内容 2
+
+3) 显示全部被修改文件的具体差异或者具体修改
+git diff branch_name_1 branch_name_2
 
 	4) 查看在 1 分支中有但是 2 分支中没有的记录
 	显示出几条记录就说明基于 2 分支创建的 1 分支
@@ -170,18 +176,20 @@
 	# left 即 < 箭头相当于 branch_1
 	# right 即 > 箭头相当于 branch_2
 	# 用箭头标识出当前记录是哪个分支提交的
-	
+
 16 代码回滚 
 	回滚并不会改变当前工作区的代码，而仅仅是改变了
 	当前版本库中的最新记录
-	git log # 查看版本的提交记录
+	git log   查看版本的提交记录
 	1) 撤销最近一次的提交, 回滚后代码的修改提示
 	将处于工作区
 	git reset HEAD^
 	2) 回滚到指定位置
-	git reset [commit_id] # 回滚
+	git reset [commit_id]   回滚
 	3) 将工作区的代码刷新称为版本库中的代码
-	# 相当于拉取 index.php 文件，并覆盖工作区文件
+	
+	相当于拉取 index.php 文件，并覆盖工作区文件
+	
 	git checkout index.php 
 
 
@@ -214,9 +222,14 @@
 	git remove -v # 可以查看到 origin 是后边的那一串地址的名字
 		      # origin 是 git 为远程仓库起的默认的名字
 
-
 21 分支合并
 	git checkout branch_1 # 切换到分支 1
 	git merge branch_2 # 把分支 2 合并到当前所在的分支
+
+22 checkout 命令理解
+
+	1. 可以用来创建分支
+	1. 可以用来切换分支，还可以使用 switch 
+	1. 可以用来撤销文件的改动
 
  
