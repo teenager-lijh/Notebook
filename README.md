@@ -4,6 +4,9 @@ Notebook 仓库是我的学习笔记,为了更好地系统地学习或者整理�
 # 如何使用该仓库
 当前共有三个文件夹,每个文件夹下都是一类内容的笔记内容。
 
+## 00-Fragments
+按期日存放了我的碎片化学习的内容
+
 ## 01-Build-Your-Own-Operating-System 
 
 Build-Your-Own-Operating-System 是我的同名代码仓的笔记，实现一个操作系统
