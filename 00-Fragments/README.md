@@ -3,4 +3,5 @@
 | 2022-12-18    | PyTorch 线性回归（数据生成）            |
 | 2022-12-20-01 | RNN 循环神经网络（PyTorch and Scratch） |
 | 2022-12-20-02 | matplotlib 绘制动图                     |
+| 2023-01-03    | PyTorch unsqueeze 添加维度              |
 
