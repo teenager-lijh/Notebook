@@ -1,0 +1,635 @@
+% 设置文档文字的正常大小是 10 磅
+\documentclass[8pt]{article}
+\usepackage{ctex}
+\usepackage{xltxtra}
+\usepackage{mflogo}
+\usepackage{texnames}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+
+
+%\documentclass{ctexart}
+% texdoc lshort-zh
+% 查看 latex 的中文版教程
+
+% texdoc ctex
+% 查看 ctex 的使用 比如其中的 ctexset 命令的使用方法
+
+
+% 定义标题格式
+%\ctexset{
+%	section = {
+%		format+ = \zihao{-4} \heiti \raggedright
+%		name = {,、},
+%		number = \chinese{section}
+%
+%
+%	},
+%
+%}
+
+
+
+% 定义标题
+\title{\heiti 基于指令精调的LLM语言风格研究}
+\author{\kaishu 李嘉豪}
+\date{\today}
+
+
+% 定义新的命令
+\newcommand{\degree}{^\circ}
+
+
+\begin{document}
+
+	\maketitle
+	
+	\tableofcontents
+	
+	{\mdseries Medium Seriese}
+	{\bfseries Boldface Series}
+	
+	\textbf{中文粗体}
+	
+	$$
+		\angle C=90\degree
+	$$
+
+	% 创建一个新的环境；
+	% 公式自动标号
+	\begin{equation}
+		f(x)=666
+	\end{equation}
+	\begin{equation}
+		f(x)=777
+	\end{equation}
+	
+	
+	% 字体族设置（罗马字体，无衬线字体，打字机字体）
+	% 在括号内的字体为罗马字体
+	\textrm{Roman Family 你好啊 ~ hello world.}
+	
+	\textsf{你好呀 ~ 无衬线字体}
+	
+	\texttt{打字机字体，你好呀 ~ }
+	
+	
+	% 后续的字体为罗马字体
+	\rmfamily{Roman Family
+	你好啊 ~ 
+	hello world.罗马字体}
+	
+	\ttfamily{这是一个打字机；花括号表示的是语句的生效范围（花括号用于分组，表示作用域）;正文中间空一行代表两个不同的段落}
+	
+	{\sffamily 你好呀，无衬线字体}
+	
+	{\ttfamily 你好呀 ~ 打字机字体}
+	  
+	% 字体系列设置（粗细、宽度）
+	\textmd{Medium Seriese}
+	\textbf{Boldface Series}
+	
+	{\mdseries Medium Seriese}
+	{\bfseries Boldface Series}
+	
+	% 形状设置
+	{\upshape Upright Shape}
+	{\itshape Italic Shape}
+	{\slshape Slanted Shape}
+	{\scshape Small Caps Shape}
+	
+	% 中文字体设置
+	{\songti 宋体}
+	{\quad}
+	{\heiti 黑体}
+	{\quad}
+	{\fangsong 仿宋}
+	{\quad}
+	{\kaishu 楷书}
+	
+	% 粗体和斜体
+	\textbf{\songti 中文粗体}
+	{\quad}
+	\textit{中文斜体}
+	
+	
+	% 字体大小
+	{\tiny hello} \\
+	{\scriptsize hello} \\
+	{\footnotesize hello} \\
+	{\small hello} \\
+	{\normalsize hello} \\
+	{\large hello} \\
+	{\Large hello} \\
+	{\LARGE hello} \\
+	{\huge hello} \\
+	{\Huge hello} 
+	
+	% 设置中文的字号
+	\zihao{0} 初号
+	
+	\zihao{-0} 小初号
+	
+	\zihao{5} 五号
+	
+	\section{引言}
+	大型语言模型，如ChatGPT已经引起了世界上广泛关注。ChatGPT使用了大规模的数据集作为预训练数据，使得模型能够先在大量的人类语料上进行无监督学习，这使得模型能够对人类世界的知识先进行一遍学习和了解。大型语言模型拥有着惊人的参数量，这使得模型同时使得模型拥有了良好的表达能力。随着ChatGPT系列的模型的发布，Facekbook也发布了在大规模数据集上预训练完成的大型语言模型LLaMA，基于LLaMA的一系列模型诸如斯坦福大学alpaca，哈尔滨工业大学的Chinese-LLaMA，和Chinese-Alpaca等模型，这些模型都是基于预训练完成的模型LLaMA的基础上进行再次预训练或指令精调得到的。
+	
+BERT模型的出现使得NLP领域打开了先进行模型预训练再进行微调的训练方式。预训练的过程可以使模型预先获得大量的知识，但还不能有效的使用，随后在该模型上通过微调（如基于Lora的指令精调）可以让模型更好地发挥已经学习到的知识。
+
+在本文中通过使用真实的对话数据集进一步制作成为可以用于指令精调的数据对现有的开源大型语言模型ChatGLM和alpaca的基础上再次进行精调，从而尝试让模型回答的语言富有个性化，通过实验表明，在泛化能力更强的ChatGLM2模型的基础上进行微调得到的模型优于LLaMA系列模型基础上精调的效果。
+
+本文的贡献主要在于以下两点：
+推出了一种处理大量对话记录并自动化自作出富有该聊天记录风格的指令精调数据集的方法
+验证了一种在不影响模型泛化性能的情况下使得模型具有语言风格的指令精调方法并在ChatGLM2模型上取得了良好的效果
+
+	\section{实验方法}
+	
+	使用反斜杠命令指示用于\\换行,而并没有产生新的段落,但是可以使用 \par 命令产生新的段落
+	
+	\subsection{方法选择}
+	
+	\subsubsection{如何选择}
+	
+	\section{结论}
+	
+	\section{致谢}
+	
+	 
+	
+	% 1em (当前字体中 M 的宽度)
+	a\quad b
+	
+	% 2em 
+	a{\qquad}b
+	
+	% 约为 1/6 个 em
+	a\,a\thinspace b
+	
+	% 0.5 em
+	a\enspace b
+	
+	% 空格
+	a \ b
+	
+	% 硬空格
+	a~b
+	
+	% 1pc=12pt=4.218mm
+	a\kern 6pc b
+	
+	a \kern -2em b
+	
+	a\hspace{35pt}b
+	
+	% 占位宽度
+	a\hphantom{xyz}b
+	
+	% 弹性长度
+	a\hfill b
+	\section{\LaTeX 控制符}
+	\# \$ \{ \} \~{} \_{} \^{} \textbackslash
+	\&
+	
+	\section{排版符号}
+	\S \P \dag \ddag \copyright \pounds
+	
+	
+	\section{标志符号}
+	\TeX{} \LaTeX{} \LaTeXe{}
+	
+	% \usepackage{xltxtra}
+	\XeLaTeX
+	
+	% \usepackage{mflogo}
+	\METAFONT{} \MF{} \MP{}
+	
+	% \usepackage{texnames}
+	\AmSTeX{} \AmS-\LaTeX{}
+	\BibTeX{} \LuaTeX{}
+	
+	
+	\section{引号}
+	` ' `` '' ``你好''
+	
+	
+	\section{连字符}
+	- -- ---
+	
+	
+	\section{非英文字符}
+	\oe \OE \ae \AE \aa \AA \o \O \l \L \ss \SS !`?`
+	
+	
+	\section{重音符号 o 为例}
+	\`o  \'o  \^o 
+	
+	\section{graphicx 实现插图}
+	% \includegraphicx[<选项>]{<文件名>}
+	% ESP,PDF,PNG,JPEG,BMP
+%	\graphicspath{{figures/}, {可以指定多个路径}} 指定图像的搜索路径
+	\graphicspath{{figures/}}
+	
+	
+	
+	% 展示具体的图像
+	\includegraphics{123.png}
+	
+%	\includegraphics{123.png}
+	
+%	\includegraphics{123.png}
+	
+	% scale 指定缩放值，单位 1 的原图片
+	\includegraphics[scale=0.5]{123.png}
+	
+	% 指定固定值的宽度 width
+	\includegraphics[width=5cm]{123.png}
+	
+	% 指定固定值的高度
+	\includegraphics[height=3cm]{123.png}
+	
+	% 这两个没看懂什么几倍的高度宽度
+	\includegraphics[width=0.1\textwidth]{123.png}
+	\includegraphics[height=0.1\textheight]{123.png}
+	
+	% 所有相关的内容可以通过命令
+	% texdoc graphicx 来查看插图相关的说明
+	
+	\includegraphics[angle=-90, width=0.2\textwidth]{123.png}
+	
+	\includegraphics[angle=-90, width=0.2\textwidth]{123.png}
+	
+	\section{latex 中的表格}
+	
+	% texdoc booktab 三线表
+	% texdoc longtab 跨页长表格
+	% taxdoc tabu
+	% l 左对齐 c 居中对齐 r 右对齐
+	% \\ 双斜杠表示结束一行并且在有新的一行时产生新的一行
+	% 可是使用 | 竖线符号产生表格的竖线
+	% 使用两个 | 代表双竖线的表格线
+	% 使用 hline 产生表格横线
+	% 使用 p 产生指定宽度的表列，超过宽度自动换行
+	% 如何指定列宽度并且居中？
+	\begin{tabular}{| l || c | c | c |p{1.5cm}|}
+	\hline
+		姓名 & 语文 & 数学 & 外语 & 备注 \\
+		\hline
+		姓名 & 语文 & 数学 & 外语 & 备注 \\
+		\hline
+		姓名姓名姓名姓名 & 语文 & 数学 & 外语 & 备注备注备注备注 \\
+		\hline
+	\end{tabular}
+
+	
+	
+	\section{浮动体环境}
+	
+	<允许位置> 参数 (默认 tbp)
+	h, 此处 (here) - 代码所在的上下文位置
+	t, 页顶 (top) - 代码所在页面或之后页面的顶部
+	b, 页底 (bottom) - 代码所在页面或之后页面的底部
+	p, 独立一页 (page) - 浮动页面
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.3]{123.png}
+%		标题控制(caption  bicaption 等宏包)
+%		并排与子图标(subcaption  subfig  floatrow 等宏包)
+%		绕排(picinpar  wrapfig 等宏包)
+		\caption{这是蓝胖子}
+		\includegraphics[scale=0.3]{123.png}
+		\caption{这是蓝胖子} 
+	\end{figure}
+	
+	% h 表示只能在这里 here
+	% 如果不加 方括号中的限定符
+	% 那么里面的内容就浮动到这一页的最上方去了
+	% htbp 表示任意位置
+	
+	% 引用标签
+	latex中吉祥物小狮子---见表\ref{table-test}
+	
+	\begin{table}[htbp]
+	
+		% 居中排版
+		\centering
+		\caption{这是一个笨表格}\label{table-test}
+		\begin{tabular}{| l || c | c | c |p{1.5cm}|}
+			\hline
+			姓名 & 语文 & 数学 & 外语 & 备注 \\
+			\hline
+			姓名 & 语文 & 数学 & 外语 & 备注 \\
+			\hline
+			姓名姓名姓名姓名 & 语文 & 数学 & 外语 & 备注备注备注备注 \\
+			\hline
+		\end{tabular}
+		
+	\end{table}
+	
+	
+	浮动章节结束
+	
+	\section{数学公式排版}
+	
+	行内公式
+	
+	$f(x) = 777$
+	
+	上标(使用大括号构成分组)
+	
+	$3x^{20}$
+	
+	下标
+	$3x_{666}$
+	
+	希腊字母
+	$\alpha$
+	
+	$\beta$
+	
+	$\gamma$
+	
+	$\epsilon$
+	
+	$\pi$
+	
+	$\omega$
+	
+	$\Gamma$
+	
+	$\Delta$
+	
+	$\Theta$
+	
+	$\Pi$
+	
+	$\Omega$
+	
+	
+	数学函数
+	
+	$\log$
+	
+	$\sin$
+	
+	$\cos$
+	
+	$arcsin$
+	
+	$arccos$
+	
+	$\ln$
+	
+	$\sqrt[4]{123}$
+	
+	分式
+	
+	$\frac{x}{y}$
+	
+	行间公式
+	
+	$$
+	\frac{hello}{world}
+	$$
+	
+	\[ f(x) = 666 \]
+	
+	\begin{displaymath}
+		f(x) = 999
+	\end{displaymath}
+	
+	
+	自动编号 equation 环境
+	
+	交换律公式可见 \ref{eq:commutative}
+	
+	\begin{equation}
+		a+b = b+a \label{eq:commutative}
+	\end{equation}
+	
+	
+	不需要编号的公式使用 euqation* 环境
+	需要使用 amsmath 宏包
+	\begin{equation*}
+		a+b=b+a
+	\end{equation*}
+	
+	
+	
+	\section{矩阵排版}
+	
+	
+	% 需要使用 amsmath 包
+	
+	\[
+	\begin{matrix}
+		0 & 1 \\
+		1 & 0 
+	\end{matrix}
+	\]
+	
+		\[
+	\begin{pmatrix}
+		0 & 1 \\
+		1 & 0 
+	\end{pmatrix}
+	\]
+	
+	\[
+	\begin{bmatrix}
+		0 & 1 \\
+		1 & 0 
+	\end{bmatrix}
+	\]
+	
+	\[
+	\begin{Bmatrix}
+		0 & 1 \\
+		1 & 0 
+	\end{Bmatrix}
+	\]
+	
+	\[
+	\begin{vmatrix}
+		0 & 1 \\
+		1 & 0 
+	\end{vmatrix}
+	\]
+	
+	\[
+	\begin{Vmatrix}
+		0 & 1 \\
+		1 & 0 
+	\end{Vmatrix}
+	\]
+	
+%	常用省略号
+%	\dots
+%	
+%	\vdots
+%	
+%	\ddots
+%	\text 用于临时切换文本模式 
+%	{\raisebox{1.3ex}[0pt]}
+	
+	\[
+	\begin{Vmatrix}
+		0 & \dots & \text{\Large 0}\\
+		1 & \ddots & \vdots\\
+		\multicolumn{2}{c}{\Huge 0} & 3 \\
+		\hdotsfor{3}
+	\end{Vmatrix} 
+	\]
+	
+	
+	
+	这是一个矩阵
+	\begin{math}
+	\left( % 动手加上左括号
+	\begin{smallmatrix}
+		1 & 2 \\
+		3 & 4 
+	\end{smallmatrix}
+	\right)
+	\end{math}
+	
+	
+	
+	% @ 符号插入内容
+	\[
+	\begin{array}{r @{\hspace{30pt}} r}
+		1 & 2 \\
+		\hline
+		3 & 4 \\
+	\end{array}
+	\]
+	
+	
+	\[
+	\begin{array}{r @{\hspace{30pt}} r}
+		1 
+		
+		& 
+		\begin{array}{l}
+		
+		\left. \rule{0mm}{7mm} \right \} p
+		
+		\end{array} 
+		
+		\\
+		\hline
+		3 & 4 \\
+	\end{array}
+	\]
+	
+	
+	\[
+	\begin{array}{r @{\hspace{-5pt}} r}
+		\begin{array}{r r}
+			1 & 2 \\
+			3 & 4 \\	
+		\end{array}
+		&
+		\begin{array}{l}
+			\left. \rule{0mm}{7mm} \right \} p
+		\end{array}
+		
+		\\ 
+		
+		\begin{array}{cc}
+		\underbrace{\rule{17mm}{0mm}}_m &
+		\underbrace{\rule{17mm}{0mm}}_m
+		\end{array}
+		
+		&
+		1
+		\\
+	\end{array}
+	\]
+	
+	
+	\section{多行公式排版}
+	
+	\begin{gather}
+		a + b = b + a \\
+		a + b = b + a
+	\end{gather}
+	
+	% 使用 \notag 可阻止编号
+	\begin{gather}
+		a + b = b + a \notag \\
+		a + b = b + a \notag
+	\end{gather}
+	
+	\begin{gather*}
+		a + b = b + a \\
+		a + b = b + a
+	\end{gather*}
+	
+	\begin{align}
+		x &= t & x &= \cos t & x &= t \\
+		y &= 2t
+	\end{align}
+	
+	\begin{align}
+		x &= t & x &= \cos t & x &= t \\
+		&& y &= 2t 
+	\end{align}
+	
+	
+	\begin{align*}
+		x &= t & x &= \cos t & x &= t \\
+		&& y &= 2t 
+	\end{align*}
+	
+	% 这是使用 equation 环境排版的公式
+	% 因此只有一个编号
+	\begin{equation}
+		\begin{split}
+			x &= 10 \\
+			&= x \\
+			&= y
+		\end{split}
+	\end{equation}
+	
+	% 分段函数排版
+	\begin{equation}
+		D(x) = \begin{cases}
+			1, \text{if} x \in \mathbb{Q} \\
+			2, \text{if} x \in \mathbb{R} \setminus \mathbb{Q} \\
+		\end{cases}
+	\end{equation}
+	
+	\section{参考文献}
+	
+	
+	
+	可以参考\cite{article1}中介绍的内容
+	
+	可以参考\cite{article2}中介绍的内容
+	
+	可以参考\cite{article3}中介绍的内容
+	
+	\begin{thebibliography}{100}
+		\bibitem{article1} blueberry. \emph{基于随机森林的研究}[J]. 计算机科学. 2014(06)
+		\bibitem{article2} blueberry. \emph{基于随机森林的研究}[J]. 计算机科学. 2014(06)
+		\bibitem{article3} blueberry. \emph{基于随机森林的研究}[J]. 计算机科学. 2014(06)				
+	\end{thebibliography}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+\end{document}

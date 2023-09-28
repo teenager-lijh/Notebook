@@ -1,4 +1,4 @@
 test/*
 !/test/index.php
 test2/test.txt
-.DS_Store
+*.DS_Store*

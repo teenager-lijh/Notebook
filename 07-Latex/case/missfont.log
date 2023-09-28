@@ -1,0 +1,2 @@
+mktexpk --mfmode ljfour --bdpi 600 --mag 1+484/600 --dpi 1084 unihei57
+mktexpk --mfmode ljfour --bdpi 600 --mag 1+484/600 --dpi 1084 unihei57

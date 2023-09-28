@@ -1,0 +1,20 @@
+\contentsline {section}{\numberline {1}引言}{3}{}%
+\contentsline {section}{\numberline {2}实验方法}{4}{}%
+\contentsline {subsection}{\numberline {2.1}方法选择}{4}{}%
+\contentsline {subsubsection}{\numberline {2.1.1}如何选择}{4}{}%
+\contentsline {section}{\numberline {3}结论}{4}{}%
+\contentsline {section}{\numberline {4}致谢}{4}{}%
+\contentsline {section}{\numberline {5}\LaTeX 控制符}{4}{}%
+\contentsline {section}{\numberline {6}排版符号}{5}{}%
+\contentsline {section}{\numberline {7}标志符号}{5}{}%
+\contentsline {section}{\numberline {8}引号}{5}{}%
+\contentsline {section}{\numberline {9}连字符}{5}{}%
+\contentsline {section}{\numberline {10}非英文字符}{5}{}%
+\contentsline {section}{\numberline {11}重音符号 o 为例}{5}{}%
+\contentsline {section}{\numberline {12}graphicx 实现插图}{6}{}%
+\contentsline {section}{\numberline {13}latex 中的表格}{7}{}%
+\contentsline {section}{\numberline {14}浮动体环境}{7}{}%
+\contentsline {section}{\numberline {15}数学公式排版}{8}{}%
+\contentsline {section}{\numberline {16}矩阵排版}{9}{}%
+\contentsline {section}{\numberline {17}多行公式排版}{11}{}%
+\contentsline {section}{\numberline {18}参考文献}{12}{}%
